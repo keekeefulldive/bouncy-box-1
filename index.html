@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <!-- 
+        this is just a fun thing for me to look at. if you don't like it go away.
+
+        heck the rules, steal my code
+    -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>bouncy box 1</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: #060606;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas">no go boss</canvas>
+
+    <script>
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+canvas.color = 'rgb(0, 0, 0)';
+
+if (window.innerWidth > window.innerHeight) {
+    canvas.width = canvas.height = window.innerHeight;
+} else {
+    canvas.width = canvas.height = window.innerWidth;
+}
+
+ctx.fillStyle = canvas.color;
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+var box = {
+    x: canvas.width / 2,
+    y: canvas.width / 4,
+    width: 30,
+    height: 30,
+    dx: 15,
+    dy: 10,
+    color: 'rgb(128, 0, 128)',
+}
+
+var then = Date.now();
+
+main();
+
+function main() {
+    var now = Date.now();
+    var mod = (now - then) / 100;
+
+    update(mod);
+    render();
+
+    then = now;
+    window.requestAnimationFrame(main);
+}
+
+function update(mod) {
+    box.x += box.dx * mod;
+    box.y += box.dy * mod;
+
+    box.width += 3 * mod;
+    box.height += 3 * mod;
+
+    if (box.x + box.width / 2 >= canvas.width - 1 ||
+        box.x - box.width / 2 <= 1 ||
+        box.y + box.height / 2 >= canvas.height - 1 ||
+        box.y - box.height / 2 <= 1) {
+
+        if (box.x + box.width / 2 >= canvas.width) {
+            box.x = canvas.width - box.width / 2 - 1;
+            box.dx = -box.dx
+        }
+        if (box.x - box.width / 2 <= 0) {
+            box.x = box.width / 2 + 1;
+            box.dx = -box.dx
+        }
+        if (box.y + box.height / 2 >= canvas.height) {
+            box.y = canvas.height - box.height / 2 - 1;
+            box.dy = -box.dy;
+        }
+        if (box.y - box.height / 2 <= 0) {
+            box.y = box.height / 2 + 1;
+            box.dy = -box.dy;
+        }
+
+    } else {
+
+        // yeah i know exactly what you're saying --
+        //
+        // we build beautiful robots together that rob banks 
+        // for us and live easy forever just doing exactly what we feel like,
+        //
+        // right?
+
+    }
+
+    if (box.height >= canvas.height - 3 || box.width >= canvas.width - 3) {
+        canvas.color = box.color;
+        box.x = canvas.width / 3 + Math.random() * (canvas.width / 3);
+        box.y = canvas.height / 3 + Math.random() * (canvas.height / 3);
+        box.color = 'rgb(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ')';
+        box.width = 30;
+        box.height = 30;
+    }
+
+}
+
+function render() {
+    ctx.fillStyle = canvas.color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = box.color;
+    ctx.fillRect(box.x - (box.width / 2), box.y - (box.height / 2), box.width, box.height);
+}
+
+    </script>
+
+</body>
+</html>
